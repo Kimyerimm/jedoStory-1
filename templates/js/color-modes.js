@@ -15,7 +15,13 @@
     if (storedTheme) {
       return storedTheme
     }
-    colorMode=window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    try {
+      var colorMode=window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'  
+    } catch (error) {
+      var colorMode='dark' 
+    }
+    
     
     
     return colorMode

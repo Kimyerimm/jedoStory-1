@@ -3,18 +3,17 @@ import json
 import lib.jshsFunctionLib as fun
 import json
 import datetime
-import streamlit as st
 import os 
 
 from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.document_loaders import TextLoader
+from langchain.document_loaders import TextLoader,WebBaseLoader,UnstructuredURLLoader
 from langchain.text_splitter import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
-from langchain.document_loaders import WebBaseLoader,UnstructuredURLLoader
+
 from dotenv import load_dotenv;load_dotenv() # openai_key  .env 선언 사용 
 import lib.jshsFunctionLib as jshs
 
@@ -39,11 +38,13 @@ documents=[ Document(
 
 # 학교연혁 
 # txt 파일 사용용
-loader = TextLoader("data\history.txt", encoding='utf-8')
+# loader = TextLoader("data/history.txt", encoding='utf-8')
 # html 사용
 loader = WebBaseLoader(web_path="https://jeju-s.jje.hs.kr/jeju-s/0102/history")
-
+print(1)
 page=loader.load()[0]
+page=page[0]
+print(2)
 page.page_content=jshs.html_parsing_text(
                 page_content=page.page_content,
                 start_str="학교연혁 연혁 기본 리스트 년 도 날 짜 내 용",
@@ -125,7 +126,7 @@ from langchain.chat_models import ChatOpenAI
 
 
 chain = load_qa_chain(
-    ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0),
+    ChatOpenAI(model_name="gpt-4", temperature=0),
     verbose=False
     )
 

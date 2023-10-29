@@ -6,7 +6,7 @@ import jedolAi as jedolAi
 from datetime import datetime, timedelta
 import lib.jshsFunctionLib as jshs
 
-
+# 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
 app = Flask(__name__)
 
 app.secret_key = 'sntq0586'

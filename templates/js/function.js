@@ -34,7 +34,12 @@ $(document).ready(function() {
             var colorMode=$(_this).attr("data-bs-theme-value") 
         } else {
             var colorMode=$("#bd-theme").attr("aria-label")    
+               try {
                 colorMode= colorMode.indexOf("dark") ==-1 ? 'light':'dark'  
+               } catch (error) {
+                colorMode='light'
+               }       
+                
         }
         
         if ( colorMode=="light"){ return "light"}
