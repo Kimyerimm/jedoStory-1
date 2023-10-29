@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" data-bs-theme="auto">
+<head>
+    {% include '/html/head.html' %}    
+</head>
+<body>
+   
+    <div class="container mt-2">
+         <div class="text-secondary fs-9 text-end "> Token : {{token}}</div>
+           <section id="top-menu" class="rounded-1">
+            {% include '/html/top-menu.html' %}
+           </section> 
+           <section id="main-page">
+                    <div id="chatAi" class="card my-4">
+                        <div class="card-body">
+                            <div id="chat"  style="height: 400px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="input-group d-flex">
+                                <input type="text" id="query" class="form-control" value="안녕 ?"  placeholder=" query">
+                                <button class="btn btn-primary" onclick="send_query()">Send</button>
+                            </div>
+                        </div>
+                    </div>
+           </section>
+           
+    </div>
+</body>
+<script src="/js/function.js"></script>
+<script src="/js/color-modes.js"></script>
+</html>

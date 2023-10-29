@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include 'html/head.html' %}
+</head>
+
+<body class="bg-dark  ">
+    {% set minwidth="420px" %}
+    {% include 'top-menu.html' %}
+
+    <div class="container d-flex  flex-row bg-dark  ">
+
+        <div class="d-flex flex-column  text-secondary p-4 justify-content-center">
+            
+            <div class="w-100">
+                <input type="date" id="date" name="date" class="inputDark2 fs-6"  value="{{day}}" onchange="selectDate(this)">
+            </div>
+
+            <div class="d-flex flex-wrap ">
+                <div class="d-flex flex-column me-2 mt-2 ">
+                    <div class="d-flex justify-content-between  border rounded-top p-3 bg-black"
+                        style="color:rgb(214, 220, 218);min-width: 300px;">
+                        <div id="mealTitle" >
+                            <span class="wdHide fs-8 ">{{day}}</span> 
+                            <span id="period" class="ps-2 fs-8">{{period}}</span>
+                        </div>
+                        <div class="d-flex ">
+
+                            <a class="btn btn-sm text-gray" href="/meal/breakfast/{{day}}" title="breakfast">
+                                <i class="fa-light fa-mug-saucer"></i>
+                            </a>
+                            <a class="btn btn-sm text-gray" href="/meal/lunch/{{day}}" title=" lunch ">
+                                <i class="fa-light fa-bowl-spoon"></i>
+                            </a>
+                            <a class="btn  btn-sm text-gray" href="/meal/dinner/{{day}}" title=" dinner ">
+                                <i class="fa-light fa-plate-utensils"></i>
+                            </a>
+                            <span class="btn btn-sm text-gray " onclick="createImage()">
+                                 <i class="fa-duotone fa-microchip-ai fs-5"></i> 
+                             </span>
+
+                        </div>
+
+                    </div>
+                    <div class="p-3 text-warning border rounded-bottom bg-black"  >
+
+                        {% if meal_menu|length > 0 %}
+                            {% for m in meal_menu %}
+                            <div class="meal-menu-item p-1" style="border-bottom: 1px solid gray ">
+                                {{ m }}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-1 " style="border-bottom: 1px solid gray ">
+                                해당 식단이 없습니다.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if meal_menu|length>0  and image_url %}
+                <div class="meal-image d-flex flex-column align-content-stretch border border-1  border-secondary rounded align-items-center justify-content-center mt-2 ">
+                    
+                    {% if image_url :%}
+                        <div>
+                            
+                            <img id="meal-image-made" src="{{image_url}}"  style="max-width: 100%; max-height: 100%;">
+                        </div>
+                      
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            </div> 
+                 <div id="meal-image-btn"  class="mt-2 border-top border-gray pt-1" >
+                    <i class="fa-thin fa-pot-food fs-1 text-gray-light"></i>
+                    <i id="ai" onclick="createImage()"  class="fa-thin fa-microchip-ai fs-1 text-white pointer "></i>
+                    
+                </div>
+               
+                <div class="meal-englsih text-gray-light" style="display:none;">
+                    <div id="meal-englsih" class="text-gray border-top border-gray"></div>
+                    <div  class="border-bottom border-gray text-gray-light ">
+                        
+                          <i id="meal-englsih-korean" class="변역 fa-thin fa-subtitles pointer fs-3" title="변역"></i>
+                          <div id="meal-englsih-korean-text" class="text-gray-light"></div>
+
+                    </div>
+                </div>
+                <div id="meal-image" class="py-2"></div>
+
+        </div>
+       
+    </div>
+    
+    {% include 'bottom.html' %}
+</body>
+
+<script src="function.js"></script>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+    {% include 'html/head.html' %}
+</head>
+
+<body>
+  
+  <div class="container mt-2">
+    <section id="top-menu" class="rounded-1">
+         {% include '/html/top-menu.html' %}
+    </section> 
+    <section id="main-page" class="d-flex my-5">
+
+      <div class="card" style="width: 28rem;">
+        <img src="/images/jss0.png"  style="height:18rem">
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+      <div class="card" style="width: 28rem;">
+        <img src="/images/jss1.png"  style="height:18rem">
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+
+      <div class="card" style="width: 28rem;">
+        <img src="/images/jss2.png" style="height:18rem">
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+    
+    </section>
+
+    {% include 'html/bottom.html' %}
+ </div>
+
+
+    
+</body>
+<script src="/js/function.js"></script>
+<script src="/js/color-modes.js"></script>
+</html>
