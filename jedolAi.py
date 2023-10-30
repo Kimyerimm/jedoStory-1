@@ -12,7 +12,7 @@ from dotenv import load_dotenv;load_dotenv() # openai_key  .env 선언 사용
 import lib.jshsFunctionLib as jshs
 from datetime import datetime, timedelta
 from langchain.memory import ChatMessageHistory
-
+import jedolChatDB as chatDB
 
 def vectorDB_create(vector_folder=""):
     # AI 역할
@@ -113,57 +113,32 @@ def vectorDB_create(vector_folder=""):
     vectorDB.save_local(vector_folder)
     return  vector_folder
 
-def ai_reponse( vector_folder, query ):
+def ai_reponse( vector_folder, query, token ):
     
     vectorDB = FAISS.load_local(vector_folder, OpenAIEmbeddings())
 
     llm_model = ChatOpenAI(model_name="gpt-4", temperature=0)  
 
     chain = load_qa_chain(llm_model, chain_type="stuff")
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
     
+    docs = vectorDB.similarity_search(query)
+
+   # AI 역할
+    chat_history=chatDB.query_history(token)
+
+    if  chat_history !="":
+        print( chat_history )
+        chat_history=Document(
+                        page_content=f" {  chat_history }", 
+                        metadata={'source': 'chat history'}
+                        )   
+        docs.append(chat_history)
+
+    res = chain.run(input_documents=docs, question=query)
+    new_history=' 질문: '+ query +'\n  답변: '+ res
+    chatDB.update_history(token,new_history,4000)
+         
     return res
-
-    query = "어는 학교 몇 학년 이야 ? "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
-
-
-    query = "현재 교장 선생님은? "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
-
-    query = "1회 졸업 인원수 ? "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
-
-
-    query = "학교 주소는? "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
-
-
-    query = "2023-10-30 점심은? "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
-
-
-    query = "내일은 무슨 요일 ? "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
-
-
-    query = "3월 학사 일정을 알려주세요. "
-    docs = vectorDB.similarity_search(query)
-    res = chain.run(input_documents=docs, question=query)
-    print( query,res)
 
 if __name__ == "__main__":
       today = str( datetime.now().date().today())

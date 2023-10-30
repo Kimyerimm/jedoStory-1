@@ -5,11 +5,14 @@ import os
 import jedolAi as jedolAi
 from datetime import datetime, timedelta
 import lib.jshsFunctionLib as jshs
+import jedolChatDB as chatDB
 
-# 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
+
 app = Flask(__name__)
 
-app.secret_key = 'sntq0586'
+chatDB.setup_db()
+
+app.secret_key = 'jedolstory'
 
 @app.errorhandler(404)
 def not_found(e):
@@ -17,13 +20,14 @@ def not_found(e):
 
 @app.route("/")
 def index():
-   if not 'usertokenId' in session:
-        session['usertokenId'] = jshs.rnd_str(n=10, type="s")
-        print("new-token",session['usertokenId'])    
+   if not 'token' in session:
+        session['token'] = jshs.rnd_str(n=20, type="s")
+        print("new-token",session['token'])    
+        chatDB.new_user(session['token'])
    else:
-        print("old-token",session['usertokenId'])         
+        print("old-token",session['token'])         
    
-   return render_template("/html/index.html",token=session['usertokenId'])
+   return render_template("/html/index.html",token=session['token'])
 
 @app.route('/<path:page>')
 
@@ -43,17 +47,19 @@ def query():
     query  = request.json.get("query")
     today = str( datetime.now().date().today())
     vectorDB_folder=f"vectorDB-faiss-jshs-{today}"
+
     
+
     if os.path.exists(vectorDB_folder) and os.path.isdir(vectorDB_folder):
          
          query  = request.json.get("query")
          print( "기존데이터 사용",query )
-         answer = jedolAi.ai_reponse(vectorDB_folder, query  )
+         answer = jedolAi.ai_reponse(vectorDB_folder, query, session['token'] )
     else:
         print( "백터db만들기=", vectorDB_folder )
         
         vectorDB_folder=jedolAi.vectorDB_create(vectorDB_folder)
-        answer = jedolAi.ai_reponse( vectorDB_folder, query  )
+        answer = jedolAi.ai_reponse( vectorDB_folder, query, session['token'] )
 
     return jsonify({"answer": answer })
 
