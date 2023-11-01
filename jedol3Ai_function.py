@@ -9,10 +9,10 @@ from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.document_loaders import WebBaseLoader,UnstructuredURLLoader
 from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv;load_dotenv() # openai_key  .env 선언 사용 
-import lib.jshsFunctionLib as jshs
+import jedol1Fun as jshs
 from datetime import datetime, timedelta
 from langchain.memory import ChatMessageHistory
-import jedolChatDB_function as chatDB
+import jedol2ChatDB_function as chatDB
 
 def vectorDB_create(vector_folder=""):
     # AI 역할
@@ -144,7 +144,7 @@ def ai_reponse( vector_folder, query, token ):
 if __name__ == "__main__":
       today = str( datetime.now().date().today())
       print( f"vectorDB-faiss-jshs-{today}")
-      token="test-" + jshs.rnd_str(n=10, type="s")
+      token="run-jedolAi_function" 
       chatDB.setup_db()
       chatDB.new_user(token)
       print(ai_reponse(f"vectorDB-faiss-jshs-{today}", "안녕 ?",token))

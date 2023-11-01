@@ -1,8 +1,8 @@
 
 
-import sqlite3
+import sqlite3 #확장 프로그램  SQLite3 Editor 사용
 from datetime import datetime
-import lib.jshsFunctionLib as jshs
+import jedol1Fun as jshs
 
 def setup_db():
     # chat.db가 없는 경우 생성  
@@ -70,6 +70,8 @@ def update_history(token, new_chat,max_token):
     conn.close()
 
 if __name__ == "__main__":
+    token="run-jedolChatDB_function" 
+    setup_db()
     conn = sqlite3.connect('sqlite3.chat.db')
     db = conn.cursor()
     db.execute("SELECT * FROM chat_data")

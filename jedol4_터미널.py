@@ -12,7 +12,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 
 from dotenv import load_dotenv;load_dotenv() # openai_key  .env 선언 사용 
-import lib.jshsFunctionLib as jshs
+import jedol1Fun as jshs
 
 
 

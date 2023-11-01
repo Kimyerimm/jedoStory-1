@@ -2,10 +2,10 @@
 # from flask import Flask, render_template, request, jsonify
 from flask import Flask,request,abort, render_template, send_from_directory,jsonify,redirect, url_for, session, redirect, app
 import os
-import jedolAi_function as jedolAi_function
+import jedol3Ai_function as jedol3Ai_function
 from datetime import datetime, timedelta
-import lib.jshsFunctionLib as jshs
-import jedolChatDB_function as chatDB
+import jedol1Fun as jshs
+import jedol2ChatDB_function as chatDB
 
 
 app = Flask(__name__)
@@ -55,13 +55,13 @@ def query():
          query  = request.json.get("query")
          print( "기존데이터 사용=",vectorDB_folder )
          print( "질문",query )
-         answer = jedolAi_function.ai_reponse(vectorDB_folder, query, session['token'] )
+         answer = jedol3Ai_function.ai_reponse(vectorDB_folder, query, session['token'] )
     else:
         print( "백터db만들기=", vectorDB_folder )
         
-        vectorDB_folder=jedolAi_function.vectorDB_create(vectorDB_folder)
+        vectorDB_folder=jedol3Ai_function.vectorDB_create(vectorDB_folder)
         print( "질문",query )
-        answer = jedolAi_function.ai_reponse( vectorDB_folder, query, session['token'] )
+        answer = jedol3Ai_function.ai_reponse( vectorDB_folder, query, session['token'] )
 
     return jsonify({"answer": answer })
 
