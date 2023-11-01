@@ -40,15 +40,19 @@ def image_url_to_save(image_url, folder_name="", image_name=""):
     file.write(response.content)
     return True
 
-def today_date_and_weekday( week=""):
+def today_month():
+    today = datetime.now().today()
+    return f"{today.strftime('%m월')}"  
+
+def today_date():
+    today = datetime.now().today()
+    return f"{today.strftime('%Y년 %m월 %d일')}"  
     
+def today_week_name():
     today = datetime.now().today()
     days = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
-    if week!="":
-        return f"{today.strftime('%Y년 %m월 %d일')} 이며 {days[today.weekday()]}" 
-    else: 
-        return f"{today.strftime('%Y년 %m월 %d일')}"     
-
+    return f"{days[today.weekday()]}" 
+    
 def rnd_str(n=5, type="ns"):
     if type == "n":
         characters = string.digits

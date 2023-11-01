@@ -6,7 +6,7 @@ import lib.jshsFunctionLib as jshs
 
 def setup_db():
     # chat.db가 없는 경우 생성  
-    conn = sqlite3.connect('chat.db')
+    conn = sqlite3.connect('sqlite3.chat.db')
     db = conn.cursor()
     # 테이블 생성
     db.execute('''
@@ -22,7 +22,7 @@ def setup_db():
     conn.close()
     
 def new_user(token):
-    conn = sqlite3.connect('chat.db')
+    conn = sqlite3.connect('sqlite3.chat.db')
     db = conn.cursor()
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     db.execute("INSERT INTO chat_data (token, date, history, name) VALUES (?, ?, ?, ?)",(token, current_time, '', ''))
@@ -30,18 +30,18 @@ def new_user(token):
     conn.close()
 
 def query_history(token):
-    conn = sqlite3.connect('chat.db')
+    conn = sqlite3.connect('sqlite3.chat.db')
     db = conn.cursor()
     db.execute("SELECT * FROM chat_data WHERE token=?", (token,))
     row = db.fetchall()
     conn.close()
-    if row is not None:
+    if row is not None and len(row)>0 :
         return row[0][3]
     else:
         return ""
 
 def update_history(token, new_chat,max_token):
-    conn = sqlite3.connect('chat.db')
+    conn = sqlite3.connect('sqlite3.chat.db')
     db = conn.cursor()
     
     # 현재 history 값을 가져오기
@@ -62,17 +62,20 @@ def update_history(token, new_chat,max_token):
         db.execute("UPDATE chat_data SET history=? WHERE token=?", (combined_content, token))
         conn.commit()
     else:
-        print("Token not found")
+        print("Token not found user ADD!")
+        new_user(token)
+        update_history(token, new_chat,max_token)
+        
     
     conn.close()
 
 if __name__ == "__main__":
-    conn = sqlite3.connect('chat.db')
+    conn = sqlite3.connect('sqlite3.chat.db')
     db = conn.cursor()
     db.execute("SELECT * FROM chat_data")
     rows = db.fetchall()
     for row in rows:
           print(row[3])
-    print(jshs.tiktoken_len(rows[0][3]))
+    # print(jshs.tiktoken_len(rows[0][3]))
     db.close()
     conn.close()
