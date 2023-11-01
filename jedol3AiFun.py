@@ -12,7 +12,7 @@ from dotenv import load_dotenv;load_dotenv() # openai_key  .env 선언 사용
 import jedol1Fun as jshs
 from datetime import datetime, timedelta
 from langchain.memory import ChatMessageHistory
-import jedol2ChatDB_function as chatDB
+import jedol2ChatDbFun as chatDB
 
 def vectorDB_create(vector_folder=""):
     # AI 역할
