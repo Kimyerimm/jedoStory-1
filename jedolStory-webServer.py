@@ -55,13 +55,15 @@ def query():
          query  = request.json.get("query")
          print( "기존데이터 사용=",vectorDB_folder )
          print( "질문",query )
-         answer = jedol3AiFun.ai_reponse(vectorDB_folder, query, session['token'] )
+         answer = jedol3AiFun.ai_response(vectorDB_folder, query, session['token'] )
     else:
         print( "백터db만들기=", vectorDB_folder )
         
         vectorDB_folder=jedol3AiFun.vectorDB_create(vectorDB_folder)
-        print( "질문",query )
-        answer = jedol3AiFun.ai_reponse( vectorDB_folder, query, session['token'] )
+        print( "user >", session['token'] )
+        print( "질문 > ",query )
+        answer = jedol3AiFun.ai_response( vectorDB_folder, query, session['token'] )
+        print( "답변 > ",answer )
 
     return jsonify({"answer": answer })
 

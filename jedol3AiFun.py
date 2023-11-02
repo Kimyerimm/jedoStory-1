@@ -16,27 +16,15 @@ import jedol2ChatDbFun as chatDB
 
 def vectorDB_create(vector_folder=""):
     # AI 역할
-    documents=[ Document(
-                page_content=f"""
-                오늘은 {jshs.today_date_and_weekday(week="true")}이다.
-                나는 제주과학고등학교 1학년에 재학 중입니다.
-                나의 이름은 '제돌이'입니다.
-                나의 나이는 16세입니다.
-                나는 인공지능 기초를 재미있게 배우고 있습니다. 
-                나는 코딩을 잘 합니다.
-                학교에 관련된 궁금한 점이 있으면 질문하십시요.\n\n""", 
-                metadata={'source': 'jedolStory'}
-                )
-    ]
-
+ # AI 역할
+ 
+   
 
     
     # 학교연혁 
     # txt 파일 사용용
     loader = TextLoader("data\history.txt", encoding='utf-8')
-    # html 사용
     loader = WebBaseLoader(web_path="https://jeju-s.jje.hs.kr/jeju-s/0102/history")
-
     page=loader.load()[0]
     page.page_content=jshs.html_parsing_text(
                     page_content=page.page_content,
@@ -46,11 +34,11 @@ def vectorDB_create(vector_folder=""):
                     removeword=[]
                     )
 
-    documents.append( Document(
+    documents=[ Document(
                         page_content=page.page_content,
                         metadata=page.metadata
                         )
-                    )
+               ]
 
     # print(page)
     # quit()
@@ -78,8 +66,8 @@ def vectorDB_create(vector_folder=""):
     date2 = today + timedelta(days=5)
     date1=date1.strftime('%Y-%m-%d')
     date2=date2.strftime('%Y-%m-%d')
-    loader = WebBaseLoader(web_path=f"https://api.salvion.kr/of=T10&sc=9290066&ac=date&sd={date1}&ed={date2}&code=all")
-
+    url=f"https://api.salvion.kr/neisApi?of=T10&sc=9290066&ac=date&sd={date1}&ed={date2}&code=all"
+    loader = WebBaseLoader(web_path=url)
     page=loader.load()[0]
     page_content= json.loads(page.page_content)
     page_content= jshs.getMealMenuNeis(page_content=page_content)
@@ -113,7 +101,7 @@ def vectorDB_create(vector_folder=""):
     vectorDB.save_local(vector_folder)
     return  vector_folder
 
-def ai_reponse( vector_folder, query, token ):
+def ai_response( vector_folder, query, token ):
     
     vectorDB = FAISS.load_local(vector_folder, OpenAIEmbeddings())
 
@@ -124,22 +112,43 @@ def ai_reponse( vector_folder, query, token ):
     docs = vectorDB.similarity_search(query)
 
    # AI 역할
+    docs.append(Document(
+                        page_content=f"""
+                        오늘 일자는 {jshs.today_date()}이다.
+                        오늘 요일는 {jshs.today_week_name()}이다.
+                        이번 달은 {jshs.today_month()}이다.
+                        나는 제주과학고등학교 1학년에 재학 중입니다.
+                        나의 이름은 '제돌이'입니다.
+                        나의 나이는 16세입니다.
+                        나는 인공지능 기초를 재미있게 배우고 있습니다. 
+                        나는 학교 안내 도움이 역활을 한다.\n\n""", 
+                        metadata={'source': 'jedolStory'}
+                        )
+                     )   
+    # 기존 대화 내용
     chat_history=chatDB.query_history(token)
 
     if  chat_history !="":
-        print( "token=",token )
-        print( chat_history )
+        # print( "token=",token )
+        # print( chat_history.strip())
         chat_history=Document(
                         page_content=f" {  chat_history }", 
                         metadata={'source': 'chat history'}
                         )   
         docs.append(chat_history)
+        
 
-    res = chain.run(input_documents=docs, question=query)
-    new_history=' 질문: '+ query +'\n  답변: '+ res
+    answer = chain.run(input_documents=docs, question=query)
+
+    # 대화 내용 업데이트
+    new_history=' 질문: '+ query +'\n  답변: '+ answer
+    # if  answer  not in chat_history.page_content:
+    # AI 답변 내용 업데이트 
     chatDB.update_history(token,new_history,4000)
+    
+        
          
-    return res
+    return answer 
 
 if __name__ == "__main__":
       today = str( datetime.now().date().today())
@@ -147,4 +156,4 @@ if __name__ == "__main__":
       token="run-jedolAi_function" 
       chatDB.setup_db()
       chatDB.new_user(token)
-      print(ai_reponse(f"vectorDB-faiss-jshs-{today}", "안녕 ?",token))
+      print(ai_response(f"vectorDB-faiss-jshs-{today}", "안녕 ?",token))

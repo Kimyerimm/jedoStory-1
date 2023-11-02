@@ -3,6 +3,11 @@
 <head>
     {% include '/html/head.html' %}    
 </head>
+<style>
+    body{
+        font-family: 'Nanum Gothic'; 
+    }
+</style>
 <body>
    
     <div class="container mt-2">
@@ -17,7 +22,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="input-group d-flex">
-                                <input type="text" id="query" class="form-control" value="안녕 ?"  placeholder=" query">
+                                <input type="text" id="query" class="form-control fs-5" value="안녕 ?"  placeholder="입력하세요!">
                                 <button class="btn btn-primary" onclick="send_query()">Send</button>
                             </div>
                         </div>
