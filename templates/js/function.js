@@ -8,9 +8,9 @@ $(document).ready(function() {
         });
 
         if ( color_Theme()=="dark"){
-            $("#top-menu").removeClass("bg-warning")
+            $("#menu").removeClass("bg-warning")
         } else {
-            $("#top-menu").addClass("bg-warning")
+            $("#menu").addClass("bg-warning")
         }
 })
 
@@ -21,9 +21,9 @@ $('#navbarToggleBtn').click(function() {
 $(".dropdown-item").click(function() {
     var code=color_Theme(this)
     if ( code=="dark"){
-            $("#top-menu").removeClass("bg-warning")
+            $("#menu").removeClass("bg-warning")
         } else {
-        $("#top-menu").addClass("bg-warning")
+        $("#menu").addClass("bg-warning")
         }
  });
 
